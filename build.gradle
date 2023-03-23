@@ -100,6 +100,8 @@ dependencyManagement {
 
 test {
 	finalizedBy jacocoTestReport // report is always generated after tests run
+	jvmArgs "--add-opens", "java.base/java.lang=ALL-UNNAMED"
+	jvmArgs "--add-opens", "java.base/java.util=ALL-UNNAMED"
 }
 jacocoTestReport {
 	dependsOn test // tests are required to run before generating the report
