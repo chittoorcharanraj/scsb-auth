@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.7.8'
+		springBootVersion = '2.7.13'
 		set('springCloudVersion', "2021.0.5")
 	}
 	repositories {
@@ -14,7 +14,7 @@ buildscript {
 plugins {
 	id "org.sonarqube" version "3.4.0.2513"
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'org.springframework.boot' version '2.7.8'
+	id 'org.springframework.boot' version '2.7.13'
 }
 
 apply plugin: 'java'
@@ -41,7 +41,7 @@ repositories {
 
 
 dependencies {
-	implementation fileTree(dir: '/data/commonjar', include: '*2.4.jar')
+	implementation fileTree(dir: '/data/commonjar', include: '*2.5.jar')
 	implementation('commons-beanutils:commons-beanutils:1.9.4')
 	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 	implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
@@ -56,15 +56,15 @@ dependencies {
 	implementation('org.apache.shiro:shiro-core:1.8.0')
 	implementation('org.apache.shiro:shiro-spring:1.8.0')
 	implementation('org.apache.shiro:shiro-spring-boot-web-starter:1.8.0')
-	implementation('org.projectlombok:lombok:1.18.26')
+	implementation('org.projectlombok:lombok:1.18.28')
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 	implementation 'net.logstash.logback:logstash-logback-encoder:7.3'
-	annotationProcessor('org.projectlombok:lombok:1.18.26')
-	testImplementation('org.projectlombok:lombok:1.18.26')
-	testAnnotationProcessor('org.projectlombok:lombok:1.18.26')
+	annotationProcessor('org.projectlombok:lombok:1.18.28')
+	testImplementation('org.projectlombok:lombok:1.18.28')
+	testAnnotationProcessor('org.projectlombok:lombok:1.18.28')
 
 	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
 
@@ -74,12 +74,11 @@ dependencies {
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
-	implementation group: 'org.json', name: 'json', version: '20230227'
+	implementation group: 'org.json', name: 'json', version: '20230618'
 	implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
-	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.7.8'
+	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.7.13'
 
     implementation('io.springfox:springfox-boot-starter:3.0.0')
 }
