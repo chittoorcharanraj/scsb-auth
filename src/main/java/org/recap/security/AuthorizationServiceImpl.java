@@ -83,7 +83,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         log.debug("Session Time Out Call");
         Subject currentSubject = getSubject(token);
         tokenMap.remove(token.getUsername());
-/*        if (currentSubject != null && currentSubject.getSession() != null) {
+        setSubject(token, null);
+        /* if (currentSubject != null && currentSubject.getSession() != null) {
             currentSubject.logout();
         }*/
         return false;
