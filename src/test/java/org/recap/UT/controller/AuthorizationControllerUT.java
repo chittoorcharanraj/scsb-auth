@@ -22,7 +22,7 @@ import org.recap.model.jpa.UsersEntity;
 import org.recap.security.AuthorizationServiceImpl;
 import org.recap.security.UserManagementService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static org.junit.Assert.assertFalse;

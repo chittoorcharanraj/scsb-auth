@@ -14,7 +14,7 @@ import org.recap.security.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -136,7 +136,7 @@ public class AuthorizationController {
             subject.getSession().touch();
             return true;
         } catch (InvalidSessionException e) {
-           log.error("Invalid Session Exception",e);
+            log.error("Invalid Session Exception",e);
         }
         return false;
     }
