@@ -21,9 +21,9 @@ import org.recap.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -127,8 +127,8 @@ public class AuthorizationControllerIT extends BaseTestCase {
     public void roles(){
         usernamePasswordToken = new UsernamePasswordToken("SupportSuperAdmin:PUL", "123");
         boolean result=false;
-       // result = authorizationController.roles(usernamePasswordToken);
-       // assertTrue(result);
+        // result = authorizationController.roles(usernamePasswordToken);
+        // assertTrue(result);
     }
     @Test
     public void touchExistingSession(){

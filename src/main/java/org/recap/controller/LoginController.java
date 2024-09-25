@@ -17,16 +17,18 @@ import org.recap.model.UserForm;
 import org.recap.model.jpa.InstitutionEntity;
 import org.recap.repository.jpa.InstitutionDetailsRepository;
 import org.recap.repository.jpa.UserDetailsRepository;
+import org.recap.security.AuthenticationService;
 import org.recap.security.AuthorizationServiceImpl;
 import org.recap.security.UserManagementService;
 import org.recap.security.UserService;
+import org.recap.security.realm.SimpleAuthorizationRealm;
 import org.recap.util.HelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -57,6 +59,9 @@ public class LoginController {
 
     @Autowired
     private AuthorizationServiceImpl authorizationService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @Autowired
     private DefaultWebSubjectContext defaultWebSubjectContext;
@@ -91,6 +96,7 @@ public class LoginController {
     @ApiOperation(value = "authService", notes = "Used to Authenticate User", consumes = "application/json")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Session created successfully")})
     public Map<String, Object> createSession(@RequestBody UsernamePasswordToken token, HttpServletRequest request, BindingResult error) {
+        SimpleAuthorizationRealm simpleAuthorizationRealm = new SimpleAuthorizationRealm(authorizationService, authenticationService);
         UserForm userForm = new UserForm();
         Map<String, Object> authMap = new HashMap<>();
         try {
@@ -109,6 +115,7 @@ public class LoginController {
             if (!isValid) {
                 throw new IncorrectCredentialsException(ScsbConstants.ERROR_USER_TOKEN_VALIDATION_FAILED);
             }
+            this.helperUtil = helperUtil;
             Subject subject = SecurityUtils.getSubject();
             subject.login(token);
             if (!subject.isAuthenticated()) {

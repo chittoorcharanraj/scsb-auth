@@ -35,7 +35,7 @@ import org.recap.util.HelperUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static junit.framework.TestCase.assertNotNull;
@@ -55,7 +55,7 @@ public class LoginControllerUT extends BaseTestCaseUT {
 
     @Mock
     private AuthorizationServiceImpl authorizationService;
-    
+
     private String superAdminPermissionForInstitution;
 
     @Mock

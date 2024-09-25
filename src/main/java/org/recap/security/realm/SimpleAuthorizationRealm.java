@@ -1,6 +1,10 @@
 package org.recap.security.realm;
 
-import org.apache.shiro.authc.*;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -9,8 +13,10 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.recap.model.UserForm;
 import org.recap.security.AuthenticationService;
 import org.recap.security.AuthorizationService;
+import org.recap.security.AuthorizationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by dharmendrag on 29/11/16.
@@ -18,23 +24,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class SimpleAuthorizationRealm extends AuthorizingRealm{
 
-
-
-    @Autowired
     private AuthenticationService authenticationService;
-
-    @Autowired
     private AuthorizationService authorizationService;
 
 
     /**
      * Instantiates a new SimpleAuthorizationRealm.
      */
-    public SimpleAuthorizationRealm(){
+    public SimpleAuthorizationRealm(AuthorizationServiceImpl authorizationService, AuthenticationService authenticationService){
         setName("simpleAuthRealm");
         setCredentialsMatcher(new SimpleCredentialsMatcher());
         setCachingEnabled(true);
-    }
+        this.authenticationService = authenticationService;
+        this.authorizationService = authorizationService;
+   }
 
 
 

@@ -15,7 +15,10 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.subject.support.DefaultWebSubjectContext;
 import org.recap.PropertyKeyConstants;
+import org.recap.security.AuthenticationService;
+import org.recap.security.AuthorizationServiceImpl;
 import org.recap.security.realm.SimpleAuthorizationRealm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +44,12 @@ public class ApacheShiroCustomConfig {
 
     @Value("${" + PropertyKeyConstants.USERS_SESSION_TIMEOUT + "}")
     private String sessionTimeOut;//in milliseconds
+
+    @Autowired
+    private AuthorizationServiceImpl authorizationService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
 
     /**
@@ -105,7 +114,7 @@ public class ApacheShiroCustomConfig {
      */
     @Bean(name = "customSecurityManager")
     public SecurityManager securityManager() {
-        SecurityManager securityManager = new DefaultWebSecurityManager(new SimpleAuthorizationRealm());
+        SecurityManager securityManager = new DefaultWebSecurityManager(new SimpleAuthorizationRealm(authorizationService, authenticationService));
         SecurityUtils.setSecurityManager(securityManager);
         return securityManager;
     }
