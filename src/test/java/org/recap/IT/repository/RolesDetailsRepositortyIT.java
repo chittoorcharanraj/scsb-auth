@@ -9,8 +9,8 @@ import org.recap.repository.jpa.PermissionsRepository;
 import org.recap.repository.jpa.RolesDetailsRepositorty;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
