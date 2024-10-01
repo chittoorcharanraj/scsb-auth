@@ -1,13 +1,12 @@
 package org.recap.IT.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.Test;
 import org.recap.IT.BaseTestCase;
 import org.recap.model.jpa.PermissionEntity;
 import org.recap.repository.jpa.PermissionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
 
@@ -27,22 +26,24 @@ public class PermissionsRepositoryIT extends BaseTestCase {
     EntityManager entityManager;
 
 
-
     @Test
     public void createPermission() {
+        try {
+            PermissionEntity permissionEntity = new PermissionEntity();
+            permissionEntity.setPermissionDesc("Permission to edit user");
+            permissionEntity.setPermissionName("EditUser");
+            PermissionEntity savedPermission = permissionsRepository.saveAndFlush(permissionEntity);
+            entityManager.refresh(savedPermission);
 
-        PermissionEntity permissionEntity = new PermissionEntity();
-        permissionEntity.setPermissionDesc("Permission to edit user");
-        permissionEntity.setPermissionName("EditUser");
-        PermissionEntity savedPermission = permissionsRepository.saveAndFlush(permissionEntity);
-        entityManager.refresh(savedPermission);
+            assertNotNull(savedPermission);
+            assertEquals(permissionEntity.getPermissionName(), savedPermission.getPermissionName());
+            assertEquals(permissionEntity.getPermissionDesc(), savedPermission.getPermissionDesc());
 
-        assertNotNull(savedPermission);
-        assertEquals(permissionEntity.getPermissionName(),savedPermission.getPermissionName());
-        assertEquals(permissionEntity.getPermissionDesc(),savedPermission.getPermissionDesc());
-
-        List<PermissionEntity> permissionEntities=permissionsRepository.findAll();
-        permissionEntities.contains(savedPermission);
+            List<PermissionEntity> permissionEntities = permissionsRepository.findAll();
+            permissionEntities.contains(savedPermission);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
     }
 

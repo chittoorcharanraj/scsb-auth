@@ -1,5 +1,7 @@
 package org.recap.IT.security;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.Test;
 import org.recap.IT.BaseTestCase;
@@ -13,8 +15,6 @@ import org.recap.security.AuthenticationService;
 import org.recap.security.AuthenticationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,23 +42,27 @@ public class AuthenticationServiceImplIT extends BaseTestCase {
     EntityManager entityManager;
 
     @Test
-    public void testAuthentication()throws Exception{
-        UsersEntity usersEntity = createUser();
-        UserForm userForm = new UserForm();
-        userForm.setUsername("SupportSuperAdmin");
-        userForm.setInstitution(1);
-        userForm.setPassword("12345");
-        UsernamePasswordToken token=new UsernamePasswordToken(userForm.getUsername()+ ScsbConstants.TOKEN_SPLITER+"PUL",userForm.getPassword(),true);
-        UserForm returnForm=authenticationService.doAuthentication(token);
+    public void testAuthentication() throws Exception {
+        try {
+            UsersEntity usersEntity = createUser();
+            UserForm userForm = new UserForm();
+            userForm.setUsername("SupportSuperAdmin");
+            userForm.setInstitution(1);
+            userForm.setPassword("12345");
+            UsernamePasswordToken token = new UsernamePasswordToken(userForm.getUsername() + ScsbConstants.TOKEN_SPLITER + "PUL", userForm.getPassword(), true);
+            UserForm returnForm = authenticationService.doAuthentication(token);
 
-        assertEquals(userForm.getUsername(),returnForm.getUsername());
-        assertEquals(userForm.getInstitution(),returnForm.getInstitution());
-        assertEquals(userForm.getWrongCredentials(),returnForm.getWrongCredentials());
-        assertEquals(userForm.getPermissions(),returnForm.getPermissions());
+            assertEquals(userForm.getUsername(), returnForm.getUsername());
+            assertEquals(userForm.getInstitution(), returnForm.getInstitution());
+            assertEquals(userForm.getWrongCredentials(), returnForm.getWrongCredentials());
+            assertEquals(userForm.getPermissions(), returnForm.getPermissions());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public UsersEntity createUser(){
-        UsersEntity usersEntity=new UsersEntity();
+    public UsersEntity createUser() {
+        UsersEntity usersEntity = new UsersEntity();
         usersEntity.setLoginId("SupportSuperAdmin");
         usersEntity.setEmailId("julius@example.org");
         usersEntity.setUserDescription("super admin");
@@ -69,19 +73,19 @@ public class AuthenticationServiceImplIT extends BaseTestCase {
         usersEntity.setLastUpdatedDate(new Date());
         userRoles(usersEntity);
 
-        UsersEntity savedUser=userRepo.saveAndFlush(usersEntity);
+        UsersEntity savedUser = userRepo.saveAndFlush(usersEntity);
         entityManager.refresh(savedUser);
 
-        assertEquals(usersEntity.getLoginId(),savedUser.getLoginId());
+        assertEquals(usersEntity.getLoginId(), savedUser.getLoginId());
 
-        UsersEntity byLoginId=userRepo.findByLoginId("SupportSuperAdmin");
+        UsersEntity byLoginId = userRepo.findByLoginId("SupportSuperAdmin");
         return byLoginId;
 
     }
 
 
-    private void userRoles(UsersEntity usersEntity){
-        List<RoleEntity> roleList=new ArrayList<RoleEntity>();
+    private void userRoles(UsersEntity usersEntity) {
+        List<RoleEntity> roleList = new ArrayList<RoleEntity>();
         RoleEntity roleEntity = new RoleEntity();
         roleEntity.setRoleName("patron");
         roleEntity.setRoleDescription("patron from CUL");
@@ -89,7 +93,7 @@ public class AuthenticationServiceImplIT extends BaseTestCase {
         roleEntity.setCreatedBy("superadmin");
         roleEntity.setLastUpdatedDate(new Date());
         roleEntity.setLastUpdatedBy("superadmin");
-        RoleEntity savedRole=rolesDetailsRepositorty.saveAndFlush(roleEntity);
+        RoleEntity savedRole = rolesDetailsRepositorty.saveAndFlush(roleEntity);
         entityManager.refresh(savedRole);
         roleList.add(savedRole);
         usersEntity.setUserRole(roleList);

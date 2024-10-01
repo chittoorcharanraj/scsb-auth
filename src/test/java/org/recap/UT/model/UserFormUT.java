@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNotNull;
 public class UserFormUT {
 
     @Test
-    public void testUserForm(){
+    public void testUserForm() {
         UserForm userForm = new UserForm();
         userForm.setInstitution(1);
         userForm.setPassword("admin");
@@ -30,7 +30,7 @@ public class UserFormUT {
         assertNotNull(userForm.getUserId());
         assertNotNull(userForm.getUserInstitution());
         assertNotNull(userForm.getUsername());
-        assertEquals(true,userForm.isPasswordMatcher());
+        assertEquals(true, userForm.isPasswordMatcher());
 
     }
 

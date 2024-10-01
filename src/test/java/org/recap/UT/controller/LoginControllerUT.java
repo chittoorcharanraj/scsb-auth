@@ -1,9 +1,8 @@
 package org.recap.UT.controller;
 
-import org.apache.shiro.SecurityUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.support.DefaultWebSubjectContext;
@@ -14,9 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.recap.PropertyKeyConstants;
 import org.recap.ScsbConstants;
 import org.recap.UT.BaseTestCaseUT;
@@ -35,7 +32,6 @@ import org.recap.util.HelperUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static junit.framework.TestCase.assertNotNull;
@@ -43,8 +39,8 @@ import static junit.framework.TestCase.assertNotNull;
 /**
  * Created by dharmendrag on 6/2/17.
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(SecurityUtils.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
+//@PrepareForTest(SecurityUtils.class)
 public class LoginControllerUT extends BaseTestCaseUT {
 
     @InjectMocks
@@ -67,7 +63,6 @@ public class LoginControllerUT extends BaseTestCaseUT {
     @Mock
     private DefaultWebSubjectContext defaultWebSubjectContext;
 
-    protected SecurityManager securityManager;
 
     /**
      * The User details repository.
@@ -99,7 +94,7 @@ public class LoginControllerUT extends BaseTestCaseUT {
     UsernamePasswordToken usernamePasswordToken = null;
 
     @Before
-    public  void setup(){
+    public void setup() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -127,8 +122,6 @@ public class LoginControllerUT extends BaseTestCaseUT {
 
         String values[] = userManagementService.userAndInstitution(usernamePasswordToken.getUsername());
         Mockito.when(helperUtil.getInstitutionIdByCode(values[1])).thenReturn(institutionEntity);
-        PowerMockito.mockStatic(SecurityUtils.class);
-        PowerMockito.when(SecurityUtils.getSubject()).thenReturn(subject);
         Mockito.doNothing().when(subject).login(usernamePasswordToken);
 
         Mockito.when(subject.getPrincipal()).thenReturn(userId);
@@ -169,6 +162,7 @@ public class LoginControllerUT extends BaseTestCaseUT {
         permissionMap.put(11, ScsbConstants.RESUBMIT_REQUEST);
         return permissionMap;
     }
+
     @Test
     public void testCreateSessionAuthenticationException() {
         String loginUser = "testuser:" + supportInstitution;
@@ -192,8 +186,6 @@ public class LoginControllerUT extends BaseTestCaseUT {
 
         String values[] = userManagementService.userAndInstitution(usernamePasswordToken.getUsername());
         Mockito.when(helperUtil.getInstitutionIdByCode(values[1])).thenReturn(institutionEntity);
-        PowerMockito.mockStatic(SecurityUtils.class);
-        PowerMockito.when(SecurityUtils.getSubject()).thenReturn(subject);
         Mockito.doNothing().when(subject).login(usernamePasswordToken);
         Mockito.when(subject.getPrincipal()).thenReturn(userId);
         Mockito.when(subject.getSession()).thenReturn(session);
@@ -201,6 +193,7 @@ public class LoginControllerUT extends BaseTestCaseUT {
         Map<String, Object> map = loginController.createSession(usernamePasswordToken, httpServletRequest, bindingResult);
         assertNotNull(map);
     }
+
     @Test
     public void testCreateSessionException() {
         String loginUser = "testuser:" + supportInstitution;
@@ -224,8 +217,6 @@ public class LoginControllerUT extends BaseTestCaseUT {
 
         String values[] = userManagementService.userAndInstitution(usernamePasswordToken.getUsername());
         Mockito.when(helperUtil.getInstitutionIdByCode(values[1])).thenReturn(institutionEntity);
-        PowerMockito.mockStatic(SecurityUtils.class);
-        PowerMockito.when(SecurityUtils.getSubject()).thenReturn(subject);
         Mockito.doNothing().when(subject).login(usernamePasswordToken);
 
         Mockito.when(subject.getPrincipal()).thenReturn(userId);
@@ -237,6 +228,7 @@ public class LoginControllerUT extends BaseTestCaseUT {
         Map<String, Object> map = loginController.createSession(usernamePasswordToken, httpServletRequest, bindingResult);
         assertNotNull(map);
     }
+
     @Test
     public void testCreateSessionIncorrectCredentialsException() {
         String loginUser = "testuser";
@@ -244,6 +236,7 @@ public class LoginControllerUT extends BaseTestCaseUT {
         Map<String, Object> map = loginController.createSession(usernamePasswordToken, httpServletRequest, bindingResult);
         assertNotNull(map);
     }
+
     @Test
     public void testCreateSessionCredentialsException() {
         String loginUser = "testuser";
@@ -251,6 +244,7 @@ public class LoginControllerUT extends BaseTestCaseUT {
         Map<String, Object> map = loginController.createSession(usernamePasswordToken, httpServletRequest, bindingResult);
         assertNotNull(map);
     }
+
     @Test
     public void testCreateSessionUnknownAccountException() {
         String loginUser = "testuser:" + supportInstitution;
@@ -274,12 +268,11 @@ public class LoginControllerUT extends BaseTestCaseUT {
 
         String values[] = userManagementService.userAndInstitution(usernamePasswordToken.getUsername());
         Mockito.when(helperUtil.getInstitutionIdByCode(values[1])).thenReturn(institutionEntity);
-        PowerMockito.mockStatic(SecurityUtils.class);
-        PowerMockito.when(SecurityUtils.getSubject()).thenReturn(subject);
         Mockito.doThrow(new UnknownAccountException()).when(subject).login(usernamePasswordToken);
         Map<String, Object> map = loginController.createSession(usernamePasswordToken, httpServletRequest, bindingResult);
         assertNotNull(map);
     }
+
     @Test
     public void logoutUser() {
         String loginUser = "testuser:" + supportInstitution;

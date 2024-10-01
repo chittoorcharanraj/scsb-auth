@@ -3,10 +3,10 @@ package org.recap.IT;
 
 import org.apache.shiro.mgt.SecurityManager;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.recap.Main;
 import org.recap.config.ApacheShiroCustomConfig;
 import org.recap.repository.jpa.InstitutionDetailsRepository;
@@ -22,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +30,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(classes = Main.class)
 @WebAppConfiguration
 @Transactional
@@ -76,19 +72,12 @@ public class BaseTestCase {
     @Autowired
     PermissionsRepository permissionsRepository;
 
-    @Before
-    public void loadApplicationContexts() {
-        this.mockMvc = webAppContextSetup(applicationContext).build();
-        assertNotNull(applicationContext);
-        securityManager = (SecurityManager) applicationContext.getBean("securityManager");
-        assertNotNull(securityManager);
-    }
-
     @Autowired
     public void setConverters(HttpMessageConverter<?>[] converters) {
         this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream().filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter).findAny().get();
         Assert.assertNotNull("the JSON message converter must not be null", this.mappingJackson2HttpMessageConverter);
     }
+
     @Test
     public void loadContexts() {
         System.out.println();

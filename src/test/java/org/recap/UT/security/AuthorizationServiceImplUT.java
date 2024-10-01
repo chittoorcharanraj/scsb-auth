@@ -45,79 +45,80 @@ public class AuthorizationServiceImplUT extends BaseTestCaseUT {
     @Mock
     private UserService userService;
 
-    Map<Integer,String> permissionMap=null;
+    Map<Integer, String> permissionMap = null;
 
 
     @Test
-    public void getSubject(){
-        String loginUser="SupportSuperAdmin:PUL";
+    public void getSubject() {
+        String loginUser = "SupportSuperAdmin:PUL";
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(loginUser, "123");
-        Subject testSubject=authorizationServiceimpl.getSubject(usernamePasswordToken);
+        Subject testSubject = authorizationServiceimpl.getSubject(usernamePasswordToken);
         assertNull(testSubject);
     }
 
     @Test
-    public void setSubject(){
-        String loginUser="SupportSuperAdmin:PUL";
+    public void setSubject() {
+        String loginUser = "SupportSuperAdmin:PUL";
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(loginUser, "123");
-        authorizationServiceimpl.setSubject(usernamePasswordToken,subject);
+        authorizationServiceimpl.setSubject(usernamePasswordToken, subject);
     }
 
     @Test
-    public void authorizationinfo(){
+    public void authorizationinfo() {
         UsersEntity usersEntity = createUser("SupportSuperAdmin");
-        String loginUser="SupportSuperAdmin:PUL";
-        SimpleAuthorizationInfo simpleAuthorizationInfo=new SimpleAuthorizationInfo();
+        String loginUser = "SupportSuperAdmin:PUL";
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         Mockito.when(userDetailsRepository.findById(usersEntity.getId())).thenReturn(Optional.of(usersEntity));
-        AuthorizationInfo authorizationInfo=authorizationServiceimpl.doAuthorizationInfo(simpleAuthorizationInfo,usersEntity.getId());
-        Set<String> permissions= (Set<String>) authorizationInfo.getStringPermissions();
+        AuthorizationInfo authorizationInfo = authorizationServiceimpl.doAuthorizationInfo(simpleAuthorizationInfo, usersEntity.getId());
+        Set<String> permissions = (Set<String>) authorizationInfo.getStringPermissions();
         assertTrue(permissions.contains("EditUser"));
 
     }
 
     @Test
-    public void doAuthorizationInfo(){
+    public void doAuthorizationInfo() {
         UsersEntity usersEntity = createUser("SupportSuperAdmin");
-        String loginUser="SupportSuperAdmin:PUL";
-        SimpleAuthorizationInfo simpleAuthorizationInfo=new SimpleAuthorizationInfo();
+        String loginUser = "SupportSuperAdmin:PUL";
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         Mockito.when(userDetailsRepository.findById(usersEntity.getId())).thenReturn(Optional.empty());
-        AuthorizationInfo authorizationInfo=authorizationServiceimpl.doAuthorizationInfo(simpleAuthorizationInfo,usersEntity.getId());
+        AuthorizationInfo authorizationInfo = authorizationServiceimpl.doAuthorizationInfo(simpleAuthorizationInfo, usersEntity.getId());
         assertNull(authorizationInfo);
     }
 
     @Test
-    public void unAuthorized(){
+    public void unAuthorized() {
         UsersEntity usersEntity = createUser("SupportSuperAdmin");
         String loginUser = "SupportSuperAdmin:PUL";
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(loginUser, "123");
         authorizationServiceimpl.unAuthorized(usernamePasswordToken);
     }
+
     @Test
-    public void checkPrivilege(){
-        int permissionId =2;
+    public void checkPrivilege() {
+        int permissionId = 2;
         UsersEntity usersEntity = createUser("SupportSuperAdmin");
         String loginUser = "SupportSuperAdmin:PUL";
-        try{
+        try {
             UsernamePasswordToken usernamePasswordToken1 = new UsernamePasswordToken(loginUser, "123");
             usernamePasswordToken1.setRememberMe(true);
             Mockito.when(authorizationServiceimpl.getSubject(usernamePasswordToken1)).thenReturn(subject);
             Mockito.when(subject.getSession()).thenReturn(session);
-            boolean authorized = authorizationServiceimpl.checkPrivilege(usernamePasswordToken1,permissionId);
-            assertEquals(Boolean.FALSE,authorized);
+            boolean authorized = authorizationServiceimpl.checkPrivilege(usernamePasswordToken1, permissionId);
+            assertEquals(Boolean.FALSE, authorized);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void timeOutExceptionCatch(){
+    public void timeOutExceptionCatch() {
         String loginUser = "SupportSuperAdmin:PUL";
         UsernamePasswordToken usernamePasswordToken1 = new UsernamePasswordToken(loginUser, "123");
-        ReflectionTestUtils.invokeMethod(authorizationServiceimpl,"timeOutExceptionCatch",usernamePasswordToken1);
+        ReflectionTestUtils.invokeMethod(authorizationServiceimpl, "timeOutExceptionCatch", usernamePasswordToken1);
     }
 
-    public UsersEntity createUser(String loginId){
-        UsersEntity usersEntity=new UsersEntity();
+    public UsersEntity createUser(String loginId) {
+        UsersEntity usersEntity = new UsersEntity();
         usersEntity.setLoginId(loginId);
         usersEntity.setEmailId("julius@example.org");
         usersEntity.setUserDescription("super admin");
@@ -131,11 +132,11 @@ public class AuthorizationServiceImplUT extends BaseTestCaseUT {
     }
 
 
-    private void userRoles(UsersEntity usersEntity){
+    private void userRoles(UsersEntity usersEntity) {
         PermissionEntity permissionEntity = getPermissionEntity();
         Set<PermissionEntity> permissionEntitySet = new HashSet<>();
         permissionEntitySet.add(permissionEntity);
-        List<RoleEntity> roleList=new ArrayList<RoleEntity>();
+        List<RoleEntity> roleList = new ArrayList<RoleEntity>();
         RoleEntity roleEntity = new RoleEntity();
         roleEntity.setRoleName("patron");
         roleEntity.setRoleDescription("patron from CUL");
@@ -149,7 +150,7 @@ public class AuthorizationServiceImplUT extends BaseTestCaseUT {
 
     }
 
-    private PermissionEntity getPermissionEntity(){
+    private PermissionEntity getPermissionEntity() {
         PermissionEntity permissionEntity = new PermissionEntity();
         permissionEntity.setPermissionDesc("Permission to edit user");
         permissionEntity.setPermissionName("EditUser");

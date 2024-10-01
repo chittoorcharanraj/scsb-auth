@@ -1,7 +1,6 @@
 package org.recap.IT.controller;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.recap.IT.BaseTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,8 +14,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * Created by chenchulakshmig on 6/14/16.
@@ -35,11 +32,6 @@ public class BaseControllerIT extends BaseTestCase {
     public void setConverters(HttpMessageConverter<?>[] converters) {
         this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream().filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter).findAny().get();
         Assert.assertNotNull("the JSON message converter must not be null", this.mappingJackson2HttpMessageConverter);
-    }
-
-    @Before
-    public void setup() throws Exception {
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
     protected String objectToJson(Object object) throws IOException {

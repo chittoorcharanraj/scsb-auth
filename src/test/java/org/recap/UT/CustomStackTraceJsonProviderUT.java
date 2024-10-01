@@ -24,10 +24,11 @@ public class CustomStackTraceJsonProviderUT {
     IThrowableProxy iThrowableProxy;
     @Mock
     ThrowableHandlingConverter converter;
+
     @Test
-    public void writeTo() throws Exception{
+    public void writeTo() throws Exception {
         Mockito.when(event.getThrowableProxy()).thenReturn(iThrowableProxy);
         Mockito.when(converter.convert(event)).thenReturn("message");
-        customStackTraceJsonProvider.writeTo(jsonGenerator,event);
+        customStackTraceJsonProvider.writeTo(jsonGenerator, event);
     }
 }
