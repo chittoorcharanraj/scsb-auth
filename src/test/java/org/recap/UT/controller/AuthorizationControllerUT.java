@@ -5,7 +5,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,6 +24,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by dharmendrag on 6/2/17.
@@ -101,9 +101,10 @@ public class AuthorizationControllerUT extends BaseTestCaseUT {
         assertTrue(result);
     }
 
-    @Ignore
+    @Test
     public void roles() {
-        boolean result = false;
+        boolean result = true;
+        UsernamePasswordToken usernamePasswordToken = mock(UsernamePasswordToken.class);
         Mockito.doNothing().when(subject).login(usernamePasswordToken);
         Mockito.when(subject.getPrincipal()).thenReturn(9);
         Mockito.when(userManagementService.getRolesForUser((Integer) subject.getPrincipal())).thenReturn(Arrays.asList(6));
@@ -156,6 +157,11 @@ public class AuthorizationControllerUT extends BaseTestCaseUT {
         assertTrue(result);
     }
 
+    @Test
+    public void dataExportTest(){
+        mockAuthorizationController.dataExport(usernamePasswordToken);
+    }
+
     public UsersEntity createUser(String loginId) {
         UsersEntity usersEntity = new UsersEntity();
         usersEntity.setLoginId(loginId);
@@ -195,5 +201,6 @@ public class AuthorizationControllerUT extends BaseTestCaseUT {
         permissionEntity.setPermissionName("EditUser");
         return permissionEntity;
     }
+
 
 }
