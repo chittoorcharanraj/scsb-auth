@@ -1,6 +1,8 @@
 package org.recap.UT.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
@@ -9,11 +11,10 @@ import org.apache.shiro.web.subject.support.DefaultWebSubjectContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.recap.PropertyKeyConstants;
 import org.recap.ScsbConstants;
 import org.recap.UT.BaseTestCaseUT;
@@ -40,7 +41,7 @@ import static junit.framework.TestCase.assertNotNull;
  * Created by dharmendrag on 6/2/17.
  */
 @RunWith(MockitoJUnitRunner.Silent.class)
-//@PrepareForTest(SecurityUtils.class)
+@PrepareForTest(SecurityUtils.class)
 public class LoginControllerUT extends BaseTestCaseUT {
 
     @InjectMocks
@@ -122,6 +123,8 @@ public class LoginControllerUT extends BaseTestCaseUT {
 
         String values[] = userManagementService.userAndInstitution(usernamePasswordToken.getUsername());
         Mockito.when(helperUtil.getInstitutionIdByCode(values[1])).thenReturn(institutionEntity);
+        try (MockedStatic<SecurityUtils> mockedStatic = Mockito.mockStatic(SecurityUtils.class)) {
+            mockedStatic.when(SecurityUtils::getSubject).thenReturn(subject);
         Mockito.doNothing().when(subject).login(usernamePasswordToken);
 
         Mockito.when(subject.getPrincipal()).thenReturn(userId);
@@ -144,7 +147,7 @@ public class LoginControllerUT extends BaseTestCaseUT {
         Mockito.when(userManagementService.getPermissionId(ScsbConstants.BULK_REQUEST)).thenReturn(10);
         Mockito.when(userManagementService.getPermissionId(ScsbConstants.RESUBMIT_REQUEST)).thenReturn(11);
         Map<String, Object> map = loginController.createSession(usernamePasswordToken, httpServletRequest, bindingResult);
-        assertNotNull(map);
+        assertNotNull(map);}
     }
 
     private Map<Integer, String> getPermissionMap() {
