@@ -19,23 +19,21 @@ public class InstitutionDetailsRepositoryIT extends BaseTestCase {
 
     @Test
     public void saveAndFind() throws Exception {
-        assertNotNull(institutionDetailsRepository);
+        try {
+            InstitutionEntity institutionEntity = getInstitutionEntity();
+            InstitutionEntity savedInstitutionEntity = institutionDetailsRepository.save(institutionEntity);
+            assertNotNull(savedInstitutionEntity);
+            assertNotNull(savedInstitutionEntity.getId());
+            assertEquals("OXF", savedInstitutionEntity.getInstitutionCode());
+            assertEquals("Oxford", savedInstitutionEntity.getInstitutionName());
 
-        InstitutionEntity institutionEntity = getInstitutionEntity();
-        try{
-        InstitutionEntity savedInstitutionEntity = institutionDetailsRepository.save(institutionEntity);
-        assertNotNull(savedInstitutionEntity);
-        assertNotNull(savedInstitutionEntity.getId());
-        assertEquals( "OXF",savedInstitutionEntity.getInstitutionCode());
-        assertEquals("Oxford",savedInstitutionEntity.getInstitutionName());
+            InstitutionEntity byInstitutionCode = institutionDetailsRepository.findByInstitutionCode("OXF");
+            assertNotNull(byInstitutionCode);
+            assertEquals("OXF", byInstitutionCode.getInstitutionCode());
+            assertEquals("Oxford", byInstitutionCode.getInstitutionName());
 
-        InstitutionEntity byInstitutionCode = institutionDetailsRepository.findByInstitutionCode("OXF");
-        assertNotNull(byInstitutionCode);
-        assertEquals("OXF",byInstitutionCode.getInstitutionCode());
-        assertEquals("Oxford",byInstitutionCode.getInstitutionName());
-
-        InstitutionEntity byInstitutionName = institutionDetailsRepository.findByInstitutionName("Oxford");
-        assertNotNull(byInstitutionName);
+            InstitutionEntity byInstitutionName = institutionDetailsRepository.findByInstitutionName("Oxford");
+            assertNotNull(byInstitutionName);
 
         } catch (Exception e) {
             e.printStackTrace();

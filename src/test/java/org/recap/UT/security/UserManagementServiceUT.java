@@ -40,7 +40,7 @@ public class UserManagementServiceUT extends BaseTestCaseUT {
     Session session;
 
     @Test
-    public void getPermissionId(){
+    public void getPermissionId() {
         String permissionName = "Create User";
         PermissionEntity permissionEntity = getPermissionEntity();
         Mockito.when(permissionsRepository.findByPermissionName(permissionName)).thenReturn(permissionEntity);
@@ -58,40 +58,43 @@ public class UserManagementServiceUT extends BaseTestCaseUT {
     }
 
     @Test
-    public void getRolesForUser(){
+    public void getRolesForUser() {
         int userId = 2;
         UsersEntity usersEntity = getUsersEntity();
         Mockito.when(userDetailsRepository.findById(userId)).thenReturn(Optional.of(usersEntity));
-        List<Integer> roleIds =  userManagementService.getRolesForUser(userId);
+        List<Integer> roleIds = userManagementService.getRolesForUser(userId);
         assertNotNull(roleIds);
     }
+
     @Test
-    public void toUserForm(){
+    public void toUserForm() {
         UserManagementService userManagementService = new UserManagementService();
         UsersEntity usersEntity = getUsersEntity();
         UserForm userForm = null;
-        userManagementService.toUserForm(usersEntity,userForm);
+        userManagementService.toUserForm(usersEntity, userForm);
     }
+
     @Test
-    public void toUserFormWithoutUsersEntity(){
+    public void toUserFormWithoutUsersEntity() {
         UserManagementService userManagementService = new UserManagementService();
         UsersEntity usersEntity = null;
         UserForm userForm = null;
         try {
             userManagementService.toUserForm(usersEntity, userForm);
-        }catch (Exception e){
+        } catch (Exception e) {
             assertNotNull(e);
         }
     }
 
     @Test
-    public void getPermissions(){
+    public void getPermissions() {
         Map<Integer, String> permissionMap = getPermissionMap();
         Mockito.when(subject.getSession()).thenReturn(session);
         Mockito.when(session.getAttribute(ScsbConstants.PERMISSION_MAP)).thenReturn(permissionMap);
-        Map<Integer,String> map = userManagementService.getPermissions(subject);
+        Map<Integer, String> map = userManagementService.getPermissions(subject);
         assertNotNull(map);
     }
+
     private Map<Integer, String> getPermissionMap() {
         Map<Integer, String> permissionMap = new HashMap<>();
         permissionMap.put(1, ScsbConstants.REQUEST_PLACE);
@@ -107,6 +110,7 @@ public class UserManagementServiceUT extends BaseTestCaseUT {
         permissionMap.put(11, ScsbConstants.RESUBMIT_REQUEST);
         return permissionMap;
     }
+
     private UsersEntity getUsersEntity() {
         UsersEntity usersEntity = new UsersEntity();
         usersEntity.setId(1);
@@ -126,21 +130,21 @@ public class UserManagementServiceUT extends BaseTestCaseUT {
     }
 
     @Test
-    public void toUserFormUnknownAccountException(){
+    public void toUserFormUnknownAccountException() {
         UserManagementService userManagementService = new UserManagementService();
-        try{
+        try {
             UsersEntity usersEntity = null;
             UserForm userForm = new UserForm();
             userForm.setUsername("john");
             userForm.setPassword("123");
-            userManagementService.toUserForm(usersEntity,userForm);
+            userManagementService.toUserForm(usersEntity, userForm);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void userAndInstitutionWithoutSpliter(){
+    public void userAndInstitutionWithoutSpliter() {
         UserManagementService userManagementService = new UserManagementService();
         String token = "john";
         String[] values = userManagementService.userAndInstitution(token);

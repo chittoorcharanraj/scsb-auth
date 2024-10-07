@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by dharmendrag on 2/2/17.
@@ -39,19 +39,20 @@ public class UserServiceImplUT extends BaseTestCaseUT {
     PermissionsRepository permissionsRepository;
 
     @Test
-    public void testPermissions(){
+    public void testPermissions() {
         PermissionEntity permissionEntity = getPermissionEntity();
         Mockito.when(permissionsRepository.findAll()).thenReturn(Arrays.asList(permissionEntity));
-        Map<Integer,String> permissionsMap=userServiceImpl.getPermissions();
+        Map<Integer, String> permissionsMap = userServiceImpl.getPermissions();
         assertNotNull(permissionsMap);
     }
+
     @Test
-    public void findUser() throws Exception{
+    public void findUser() throws Exception {
         String loginId = "john";
         UserForm userForm = getUserForm();
         UsersEntity usersEntity = getUsersEntity();
         Mockito.when(userDetailsRepository.findByLoginId(loginId)).thenReturn(usersEntity);
-        UserForm userForm1 = userServiceImpl.findUser(loginId,userForm);
+        UserForm userForm1 = userServiceImpl.findUser(loginId, userForm);
         assertNotNull(userForm1);
     }
 
@@ -85,6 +86,7 @@ public class UserServiceImplUT extends BaseTestCaseUT {
         userForm.setWrongCredentials("test");
         return userForm;
     }
+
     private PermissionEntity getPermissionEntity() {
         PermissionEntity permissionEntity = new PermissionEntity();
         permissionEntity.setId(1);

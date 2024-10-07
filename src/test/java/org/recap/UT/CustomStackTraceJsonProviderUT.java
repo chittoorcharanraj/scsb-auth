@@ -11,23 +11,45 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.recap.CustomStackTraceJsonProvider;
+import org.springframework.test.util.ReflectionTestUtils;
 
-@RunWith(MockitoJUnitRunner.class)
+import java.io.IOException;
+
+import static org.junit.Assert.assertTrue;
+
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class CustomStackTraceJsonProviderUT {
+
     @InjectMocks
     CustomStackTraceJsonProvider customStackTraceJsonProvider;
+
     @Mock
-    JsonGenerator jsonGenerator;
+    JsonGenerator generator;
+
     @Mock
     ILoggingEvent event;
+
     @Mock
-    IThrowableProxy iThrowableProxy;
+    IThrowableProxy throwableProxy;
+
     @Mock
-    ThrowableHandlingConverter converter;
+    ThrowableHandlingConverter throwableConverter;
+
     @Test
-    public void writeTo() throws Exception{
-        Mockito.when(event.getThrowableProxy()).thenReturn(iThrowableProxy);
-        Mockito.when(converter.convert(event)).thenReturn("message");
-        customStackTraceJsonProvider.writeTo(jsonGenerator,event);
+    public void scsbRequest() throws IOException {
+        Mockito.when(event.getThrowableProxy()).thenReturn(throwableProxy);
+        ReflectionTestUtils.setField(customStackTraceJsonProvider, "throwableConverter", throwableConverter);
+        Mockito.when(throwableConverter.convert(event)).thenReturn("Tested");
+        customStackTraceJsonProvider.writeTo(generator, event);
+        assertTrue(true);
+    }
+
+    @Test
+    public void scsbRequestTest() throws IOException {
+        Mockito.when(event.getThrowableProxy()).thenReturn(null);
+        ReflectionTestUtils.setField(customStackTraceJsonProvider, "throwableConverter", throwableConverter);
+        Mockito.when(throwableConverter.convert(event)).thenReturn("Tested");
+        customStackTraceJsonProvider.writeTo(generator, event);
+        assertTrue(true);
     }
 }

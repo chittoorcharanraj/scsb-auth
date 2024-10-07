@@ -24,66 +24,73 @@ import static org.junit.Assert.assertNotNull;
 
 public class ApacheShiroCustomConfigUT extends BaseTestCaseUT {
 
-@InjectMocks
-ApacheShiroCustomConfig apacheShiroCustomConfig;
+    @InjectMocks
+    ApacheShiroCustomConfig apacheShiroCustomConfig;
 
-@Mock
-AuthorizationException authorizationException;
+    @Mock
+    AuthorizationException authorizationException;
 
-@Mock
-Model model;
+    @Mock
+    Model model;
 
-private String sessionTimeOut = "2700000";
+    private String sessionTimeOut = "2700000";
 
     @Before
-    public void setUp(){
-        ReflectionTestUtils.setField(apacheShiroCustomConfig,"sessionTimeOut",sessionTimeOut);
+    public void setUp() {
+        ReflectionTestUtils.setField(apacheShiroCustomConfig, "sessionTimeOut", sessionTimeOut);
     }
 
     @Test
-    public void subjectException(){
+    public void subjectException() {
         Subject subject = apacheShiroCustomConfig.subject();
         assertNotNull(subject);
     }
+
     @Test
-    public void handleException(){
-        String error = apacheShiroCustomConfig.handleException(authorizationException,model);
+    public void handleException() {
+        String error = apacheShiroCustomConfig.handleException(authorizationException, model);
         assertNotNull(error);
-        assertEquals("Error","error",error);
+        assertEquals("Error", "error", error);
     }
 
     @Test
-    public void authenticator(){
+    public void authenticator() {
         ModularRealmAuthenticator modularRealmAuthenticator = apacheShiroCustomConfig.authenticator();
         assertNotNull(modularRealmAuthenticator);
     }
+
     @Test
-    public void authorizer(){
+    public void authorizer() {
         ModularRealmAuthorizer modularRealmAuthorizer = apacheShiroCustomConfig.authorizer();
         assertNotNull(modularRealmAuthorizer);
     }
+
     @Test
-    public void sessionManager(){
+    public void sessionManager() {
         DefaultWebSessionManager defaultWebSessionManager = apacheShiroCustomConfig.sessionManager();
         assertNotNull(defaultWebSessionManager);
     }
+
     @Test
-    public void securityManager(){
+    public void securityManager() {
         SecurityManager securityManager = apacheShiroCustomConfig.securityManager();
         assertNotNull(securityManager);
     }
+
     @Test
-    public void getSubjectContext(){
+    public void getSubjectContext() {
         DefaultWebSubjectContext defaultWebSubjectContext = apacheShiroCustomConfig.getSubjectContext();
         assertNotNull(defaultWebSubjectContext);
     }
+
     @Test
-    public void shiroFilterChainDefinition(){
+    public void shiroFilterChainDefinition() {
         ShiroFilterChainDefinition shiroFilterChainDefinition = apacheShiroCustomConfig.shiroFilterChainDefinition();
         assertNotNull(shiroFilterChainDefinition);
     }
+
     @Test
-    public void shiroFilterFactoryBean(){
+    public void shiroFilterFactoryBean() {
         SecurityManager securityManager = new DefaultWebSecurityManager();
         ShiroFilterFactoryBean shiroFilterFactoryBean = apacheShiroCustomConfig.shiroFilterFactoryBean(securityManager);
         assertNotNull(shiroFilterFactoryBean);

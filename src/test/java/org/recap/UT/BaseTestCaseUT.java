@@ -13,9 +13,10 @@ import org.springframework.test.context.TestPropertySource;
 public class BaseTestCaseUT {
 
     @Before
-    public  void setup(){
+    public void setup() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     public void contextLoads() {
     }

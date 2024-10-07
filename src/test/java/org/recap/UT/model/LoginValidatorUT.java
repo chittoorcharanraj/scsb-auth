@@ -9,9 +9,8 @@ import static org.junit.Assert.assertNotNull;
 public class LoginValidatorUT {
 
 
-
     @Test
-    public void validate(){
+    public void validate() {
         LoginValidator loginValidator = new LoginValidator();
         UserForm userForm = new UserForm();
         userForm.setInstitution(1);

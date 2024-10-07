@@ -38,20 +38,20 @@ public class AuthenticationServiceImplUT extends BaseTestCaseUT {
     UserDetailsRepository userDetailsRepository;
 
     @Test
-    public void doAuthentication()throws Exception{
+    public void doAuthentication() throws Exception {
         UsersEntity usersEntity = createUser();
         UserForm userForm = getUserForm();
         InstitutionEntity institutionEntity = getInstitutionEntity();
-        UsernamePasswordToken token=new UsernamePasswordToken(userForm.getUsername()+ ScsbConstants.TOKEN_SPLITER+"PUL",userForm.getPassword(),true);
+        UsernamePasswordToken token = new UsernamePasswordToken(userForm.getUsername() + ScsbConstants.TOKEN_SPLITER + "PUL", userForm.getPassword(), true);
         String[] user = UserManagementService.userAndInstitution(token.getUsername());
         Mockito.when(helperUtil.getInstitutionIdByCode(user[1])).thenReturn(institutionEntity);
         Mockito.when(userDetailsRepository.findByLoginIdAndInstitutionEntity(any(), any())).thenReturn(usersEntity);
-        UserForm returnForm=authenticationServiceImpl.doAuthentication(token);
+        UserForm returnForm = authenticationServiceImpl.doAuthentication(token);
 
-        assertEquals(userForm.getUsername(),returnForm.getUsername());
-        assertEquals(userForm.getInstitution(),returnForm.getInstitution());
-        assertEquals(userForm.getWrongCredentials(),returnForm.getWrongCredentials());
-        assertEquals(userForm.getPermissions(),returnForm.getPermissions());
+        assertEquals(userForm.getUsername(), returnForm.getUsername());
+        assertEquals(userForm.getInstitution(), returnForm.getInstitution());
+        assertEquals(userForm.getWrongCredentials(), returnForm.getWrongCredentials());
+        assertEquals(userForm.getPermissions(), returnForm.getPermissions());
     }
 
     private InstitutionEntity getInstitutionEntity() {
@@ -70,8 +70,8 @@ public class AuthenticationServiceImplUT extends BaseTestCaseUT {
         return userForm;
     }
 
-    public UsersEntity createUser(){
-        UsersEntity usersEntity=new UsersEntity();
+    public UsersEntity createUser() {
+        UsersEntity usersEntity = new UsersEntity();
         usersEntity.setLoginId("SupportSuperAdmin");
         usersEntity.setEmailId("julius@example.org");
         usersEntity.setUserDescription("super admin");
@@ -87,8 +87,8 @@ public class AuthenticationServiceImplUT extends BaseTestCaseUT {
     }
 
 
-    private void userRoles(UsersEntity usersEntity){
-        List<RoleEntity> roleList=new ArrayList<RoleEntity>();
+    private void userRoles(UsersEntity usersEntity) {
+        List<RoleEntity> roleList = new ArrayList<RoleEntity>();
         RoleEntity roleEntity = new RoleEntity();
         roleEntity.setRoleName("patron");
         roleEntity.setRoleDescription("patron from CUL");
